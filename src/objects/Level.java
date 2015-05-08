@@ -64,7 +64,7 @@ public class Level {
 																	// arraylist
 																	// of
 																	// collision
-																	// boxes.
+	Graphics2D g;																// boxes.
 	private ArrayList<Gold> goldObjects; // The arraylist of Gold objects.
 	private HashMap<Integer, BufferedImage> images; // Hashmap of tile images.
 
@@ -87,6 +87,15 @@ public class Level {
 
 		populateImages();
 		populateMap(fileName, tileSize);
+		g = img.createGraphics();
+		int currentPosition;
+		for (int r = 0; r < this.map.length; r++) {
+			for (int c = 0; c < this.map[r].length; c++) {
+				currentPosition = this.map[r][c];
+				drawTileImage(currentPosition, r, c, g);
+				
+			}
+		}
 
 	}
 
@@ -199,6 +208,7 @@ public class Level {
 	 *            the pixel size of a tile. 32 is perferable.
 	 */
 	BufferedImage img;
+	
 	public void populateMap(String fileName, int tileSize) {
 		try {
 			String parser = " ";
@@ -328,17 +338,10 @@ public class Level {
 	 *            the Graphics2D of where the object is painted.
 	 */
 	public void draw(Graphics2D g2) {
-		int currentPosition;
-		// cache the tile background in an image so tiles don't need to be drawn again and again redundantly.
-		Graphics2D g = img.createGraphics();
-		for (int r = 0; r < this.map.length; r++) {
-			for (int c = 0; c < this.map[r].length; c++) {
-				currentPosition = this.map[r][c];
-				drawTileImage(currentPosition, r, c, g);
-			}
-		}
-		g.dispose();
-		// draw cached tiles
+		
+		
+			// cache the tile background in an image so tiles don't need to be
+			// drawn again and again redundantly.
 		g2.drawImage(img, 0, 0, img.getWidth(), img.getHeight(), null);
 	}
 
@@ -384,6 +387,7 @@ public class Level {
 	 */
 	public void updateTile(int x, int y, int tileID) {
 		this.map[x][y] = tileID;
+		drawTileImage(tileID, x, y, g);
 	}
 
 	/**
